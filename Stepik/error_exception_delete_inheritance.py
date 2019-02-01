@@ -1,13 +1,23 @@
-def find_ancestry(excesption, parents, input_exception):
-    if len(parents) == 0:
-        return False
+def is_ancestry(child, parent):
     
-    if input_exception in parents:
+
+'''
+def find_parent(parent, child):
+    if parent == child:
         return True
-    else:
-        for parent in parents:
-            find_ancestry(parent, exceptions[parent], input_exception)
-    
+    if len(parents[child]) == 0:
+            return False
+        
+    for i in range(len(parents[child])):
+        if parents[child][i] == parent:
+            return True
+        else:
+            if find_parent(parent, parents[child][i]) is True:
+                return True
+            else:
+                continue
+    return False
+'''
 
 n = input() # number of exceptions
 exceptions = {}
@@ -28,10 +38,9 @@ out = []
 for _ in range(int(m)):
     exception = input()
     input_exceptions.append(exception)
-    parents = exceptions[exception]
 
     for i in range(len(input_exceptions)-1):
-        flag = find_ancestry(exception, parents, input_exceptions[i])
+        flag = is_ancestry(exception, input_exceptions[i])
 
         if flag == False:
             continue
