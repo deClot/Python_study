@@ -1,35 +1,33 @@
 class multifilter:
     def judge_half(pos, neg):
-        # допускает элемент, если его допускает хотя бы половина фукнций
         return pos >= neg
 
     def judge_any(pos, neg):
-        return pos >= 1
+        return pos > 0
 
     def judge_all(pos, neg):
-        # допускает элемент, если его допускают все функции
         return neg == 0
-    
+
     def __init__(self, iterable, *funcs, judge=judge_any):
-        # iterable - исходная последовательность
-        # funcs - допускающие функции
-        # judge - решающая функция
-        self.iterable = iterable
+        self.iterator = iter(iterable)
         self.funcs = funcs
-        self.judge = judge     
-                
+        self.judge = judge   
+
     def __iter__(self):
-        # возвращает итератор по результирующей последовательности
-        for el in self.iterable:
-            pos = 0
-            neg = 0
+        return self
+
+    def __next__(self):
+        while (True):
+            el = next(self.iterator)
+            pos, neg = 0, 0
             for func in self.funcs:
-                if func(el) == True:
+                if func(el):
                     pos += 1
                 else:
                     neg += 1
+                    
             if self.judge(pos, neg):
-                yield el
+                return el
 
 def mul2(x):
     return x % 2 == 0
