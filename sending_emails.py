@@ -1,26 +1,26 @@
 import smtplib, ssl
 
 smtp_server = 'smtp.gmail.com'  # for gmail
-port = 587 # for ssl
+port = 465 # for ssl
 
 sender = 'refenement2@gmail.com'
 password = input('Enter your password here: ')
 
+receiver = 'refenement@gmail.com'
+message = """\
+From: {}
+To: {}
+Subject: Hi There!
+This message was sent from Python!
+""".format(sender, receiver)
+
 # Encryprion context
 context = ssl.create_default_context()
 
-# Creating unencrypted connection and attempt upgrade it
-try:
-    server = smtplib.SMTP(smtp_server, port) #make a server object
-    server.ehlo() # indentify yourself
-    server.starttls(context=context) #upgrade connection
-    server.ehlo()
+with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
     server.login(sender, password)
 
-    print('It worked!')
+    #send email
+    server.sendmail(sender, receiver, message)
 
-except Exception as e:
-    print(e)
-finally:
-    server.quit() #close connection to the server
-    
+
