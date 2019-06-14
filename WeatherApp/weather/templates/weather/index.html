@@ -28,9 +28,11 @@
 			</div>
 			<div class="col-4 offset-2">
 				<h1>Information</h1>
+
+                {% for info in all_info %}
 				<div class="alert alert-info">
-                    <div class="row>">
-                        <div class=""col-9">
+                    <div class="row">
+                        <div class="col-9">
                             <b>City:</b> {{info.city}}<br>
                             <b>Temperature:</b> {{info.temp}}<sup>o</sup>
                         </div>
@@ -39,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
 			</div>
         </div>
     </div>
