@@ -19,11 +19,15 @@ class Client(Protocol):
         Обработчик подключения нового клиента
         """
         self.ip = self.transport.getHost().host
+
+
+        #else:
         self.factory.clients.append(self)
 
         print(f"Client connected: {self.ip}")
 
         self.transport.write("Welcome to the chat v0.1\n".encode())
+
 
     def dataReceived(self, data: bytes):
         """
@@ -32,18 +36,20 @@ class Client(Protocol):
         """
         message = data.decode().replace('\n', '')
 
-        print('len_clients:', len(self.factory.clients))
+        print(f'login :  {self.login}')
+        #print(f'message: {message}')
 
         if self.login is not None:
-            server_message = f"{self.login}: {message}"
-            self.factory.notify_all_users(server_message)
+                server_message = f"{self.login}: {message}"
+                self.factory.notify_all_users(server_message)
 
-            print(server_message)
+                print(server_message)
+
         else:
             if message.startswith("login:"):
                 self.login = message.replace("login:", "")
 
-                if self.login in [client.login for client in self.factory.clients]:
+                if [client.login for client in self.factory.clients].count(self.login) != 1:
                     print(f"Error: Client login {self.login} already exists")
 
                 else:
