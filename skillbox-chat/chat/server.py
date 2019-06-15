@@ -32,6 +32,8 @@ class Client(Protocol):
         """
         message = data.decode().replace('\n', '')
 
+        print('len_clients:', len(self.factory.clients))
+
         if self.login is not None:
             server_message = f"{self.login}: {message}"
             self.factory.notify_all_users(server_message)
@@ -41,10 +43,14 @@ class Client(Protocol):
             if message.startswith("login:"):
                 self.login = message.replace("login:", "")
 
-                notification = f"New user connected: {self.login}"
+                if self.login in [client.login for client in self.factory.clients]:
+                    print(f"Error: Client login {self.login} already exists")
 
-                self.factory.notify_all_users(notification)
-                print(notification)
+                else:
+                    notification = f"New user connected: {self.login}"
+
+                    self.factory.notify_all_users(notification)
+                    print(notification)
             else:
                 print("Error: Invalid client login")
 
